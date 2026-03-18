@@ -15,7 +15,7 @@
                         </svg>
                         <div>
                             <p>Your registration will be reviewed and verified by the election committee before approval.</p>
-                            <p class="mt-1 font-medium">Once approved, you will receive a Voter ID which shall be used with your mobile number for voting.</p>
+                            <p class="mt-1 font-medium">Once approved, you will receive a Voter ID.</p>
                         </div>
                     </div>
                 </div>

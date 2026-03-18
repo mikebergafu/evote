@@ -96,8 +96,8 @@
                                     @endif
                                     <div class="flex-1">
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ $candidate->name }}</h3>
-                                        @if($candidate->electionPosition)
-                                            <p class="text-sm text-orange-600 dark:text-orange-400 font-semibold mb-2">{{ $candidate->electionPosition->title }}</p>
+                                        @if($candidate->position_name)
+                                            <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
                                         @endif
                                         @if($candidate->bio)
                                             <p class="text-gray-600 dark:text-gray-400">{{ $candidate->bio }}</p>
@@ -143,8 +143,8 @@
                                         @endif
                                         <div class="flex-1">
                                             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
-                                            @if($candidate->electionPosition)
-                                                <p class="text-sm text-orange-600 dark:text-orange-400 font-semibold mb-2">{{ $candidate->electionPosition->title }}</p>
+                                            @if($candidate->position_name)
+                                                <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
                                             @endif
                                             @if($candidate->bio)
                                                 <p class="text-gray-600 dark:text-gray-400">{{ $candidate->bio }}</p>
