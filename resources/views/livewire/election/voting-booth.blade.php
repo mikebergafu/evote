@@ -97,9 +97,8 @@
                     
                     <div class="space-y-4">
                         @foreach($candidates as $candidate)
-                            <button wire:click="selectCandidate({{ $candidate->id }})" 
-                                    class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-6 transition-all shadow-md hover:shadow-xl">
-                                <div class="flex items-start gap-4 text-left">
+                            <div class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-md">
+                                <div class="flex items-start gap-4">
                                     @if($candidate->photo)
                                         <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-20 h-20 rounded-xl object-cover shadow-md">
                                     @else
@@ -113,14 +112,18 @@
                                             <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
                                         @endif
                                         @if($candidate->bio)
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $candidate->bio }}</p>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">{{ $candidate->bio }}</p>
                                         @endif
+                                        <button wire:click="selectCandidate({{ $candidate->id }})" 
+                                                class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Vote for {{ explode(' ', $candidate->name)[0] }}
+                                        </button>
                                     </div>
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
                                 </div>
-                            </button>
+                            </div>
                         @endforeach
                     </div>
 
