@@ -8,6 +8,7 @@ use App\Livewire\Election\Results;
 
 Route::view('/', 'welcome')->name('home');
 
+Route::get('/vote', \App\Livewire\Election\PublicPortal::class)->name('public.vote');
 Route::get('/get-voting-link', \App\Livewire\Election\GetVotingLink::class)->name('get.voting.link');
 Route::get('/register-voter', \App\Livewire\Election\RegisterVoter::class)->name('register.voter');
 

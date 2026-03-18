@@ -24,6 +24,12 @@ class VotingBooth extends Component
         abort_unless($election->isActive(), 403, 'Election is not active.');
         $this->election = $election;
         $this->loadPositions();
+        
+        // Prefill voter ID if coming from public portal
+        if (session()->has('prefilledVoterId')) {
+            $this->voterId = session('prefilledVoterId');
+            session()->forget('prefilledVoterId');
+        }
     }
 
     public function loadPositions()
