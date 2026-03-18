@@ -111,7 +111,7 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        @if(!request()->routeIs('register.voter'))
+                        @if(!request()->routeIs('register.voter') && !request()->routeIs('public.vote'))
                             @auth
                                 <a href="{{ route('dashboard') }}" class="cta-button relative px-6 py-2.5 bg-[#F53003] hover:bg-[#d92a02] text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl text-sm">
                                     <span class="relative z-10">Dashboard</span>
