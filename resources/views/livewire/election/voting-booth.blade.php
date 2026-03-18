@@ -58,106 +58,80 @@
                 </div>
             </div>
         @else
-            @if(!$showConfirmation)
-                <!-- Voter Info -->
-                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-4 mb-6 flex items-center justify-between shadow-lg">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm text-white/80">Voting as</p>
-                            <p class="font-bold">{{ $voter->name }}</p>
-                        </div>
-                    </div>
-                    <button wire:click="logout" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all">
-                        Not you?
-                    </button>
+            <!-- Progress Bar -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">Position {{ $currentStep + 1 }} of {{ $totalSteps }}</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ round((($currentStep + 1) / $totalSteps) * 100) }}% Complete</span>
                 </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-300" style="width: {{ (($currentStep + 1) / $totalSteps) * 100 }}%"></div>
+                </div>
+            </div>
 
-                <!-- Voting Options -->
+            <!-- Voter Info -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-4 mb-6 flex items-center justify-between shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-white/80">Voting as</p>
+                        <p class="font-bold">{{ $voter->name }}</p>
+                    </div>
+                </div>
+                <button wire:click="logout" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    Not you?
+                </button>
+            </div>
+
+            @if(!$showConfirmation)
+                <!-- Voting Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Cast Your Vote</h2>
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $currentPosition['position_name'] ?? 'Position' }}</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Select your preferred candidate</p>
+                    </div>
                     
-                    @if($candidates->count() === 1)
-                        @php $candidate = $candidates->first(); @endphp
-                        <div class="space-y-6">
-                            <!-- Candidate Display -->
-                            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-6 border-2 border-gray-200 dark:border-gray-700">
-                                <div class="flex items-start gap-4">
+                    <div class="space-y-4">
+                        @foreach($candidates as $candidate)
+                            <button wire:click="selectCandidate({{ $candidate->id }})" 
+                                    class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-6 transition-all shadow-md hover:shadow-xl">
+                                <div class="flex items-start gap-4 text-left">
                                     @if($candidate->photo)
-                                        <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-24 h-24 rounded-2xl object-cover shadow-lg">
+                                        <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-20 h-20 rounded-xl object-cover shadow-md">
                                     @else
-                                        <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-400 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg">
+                                        <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-blue-400 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-md">
                                             {{ strtoupper(substr($candidate->name, 0, 2)) }}
                                         </div>
                                     @endif
                                     <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ $candidate->name }}</h3>
+                                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
                                         @if($candidate->position_name)
                                             <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
                                         @endif
                                         @if($candidate->bio)
-                                            <p class="text-gray-600 dark:text-gray-400">{{ $candidate->bio }}</p>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $candidate->bio }}</p>
                                         @endif
                                     </div>
+                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
                                 </div>
-                            </div>
+                            </button>
+                        @endforeach
+                    </div>
 
-                            <!-- Yes/No Buttons -->
-                            <div>
-                                <p class="text-center text-lg font-semibold text-gray-900 dark:text-white mb-4">Do you approve this candidate?</p>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <button wire:click="selectCandidate({{ $candidate->id }})" 
-                                            class="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-6 rounded-2xl font-bold text-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3">
-                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        YES
-                                    </button>
-                                    <button wire:click="selectCandidate('no')" 
-                                            class="bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-6 rounded-2xl font-bold text-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3">
-                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                        NO
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <!-- Multiple Candidates -->
-                        <div class="space-y-4">
-                            @foreach($candidates as $candidate)
-                                <button wire:click="selectCandidate({{ $candidate->id }})" 
-                                        class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-6 transition-all shadow-md hover:shadow-xl">
-                                    <div class="flex items-start gap-4 text-left">
-                                        @if($candidate->photo)
-                                            <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-20 h-20 rounded-xl object-cover shadow-md">
-                                        @else
-                                            <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-blue-400 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-md">
-                                                {{ strtoupper(substr($candidate->name, 0, 2)) }}
-                                            </div>
-                                        @endif
-                                        <div class="flex-1">
-                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
-                                            @if($candidate->position_name)
-                                                <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
-                                            @endif
-                                            @if($candidate->bio)
-                                                <p class="text-gray-600 dark:text-gray-400">{{ $candidate->bio }}</p>
-                                            @endif
-                                        </div>
-                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                        </svg>
-                                    </div>
-                                </button>
-                            @endforeach
-                        </div>
-                    @endif
+                    <!-- Navigation Buttons -->
+                    <div class="flex gap-4 mt-6">
+                        @if($currentStep > 0)
+                            <button wire:click="previousStep" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
+                                ← Previous
+                            </button>
+                        @endif
+                    </div>
                 </div>
             @else
                 <!-- Confirmation -->
@@ -169,22 +143,17 @@
                             </svg>
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Confirm Your Vote</h2>
-                        @if($selectedCandidateId === 'no')
-                            <div class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-6 mb-6">
-                                <p class="text-xl font-bold text-red-600 dark:text-red-400">You are voting: NO (Against)</p>
-                            </div>
-                        @else
-                            <div class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6 mb-6">
-                                <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">You are voting for:</p>
-                                <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $candidates->find($selectedCandidateId)->name }}</p>
-                            </div>
-                        @endif
+                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">Position: <span class="font-bold">{{ $currentPosition['position_name'] }}</span></p>
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6 mb-6">
+                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">You are voting for:</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $candidates->find($selectedCandidateId)->name }}</p>
+                        </div>
                         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
                             <p class="text-red-600 dark:text-red-400 font-semibold">⚠️ This action cannot be undone!</p>
                         </div>
                         <div class="flex gap-4 justify-center">
                             <button wire:click="confirmVote" class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
-                                Confirm Vote
+                                {{ $currentStep < $totalSteps - 1 ? 'Confirm & Next' : 'Confirm & Submit' }}
                             </button>
                             <button wire:click="cancelVote" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
                                 Cancel

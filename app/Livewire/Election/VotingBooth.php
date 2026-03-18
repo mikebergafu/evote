@@ -13,6 +13,9 @@ class VotingBooth extends Component
     public Election $election;
     public $voterId = '';
     public $voter = null;
+    public $currentStep = 0;
+    public $positions = [];
+    public $votes = [];
     public $selectedCandidateId = null;
     public $showConfirmation = false;
 
@@ -20,6 +23,17 @@ class VotingBooth extends Component
     {
         abort_unless($election->isActive(), 403, 'Election is not active.');
         $this->election = $election;
+        $this->loadPositions();
+    }
+
+    public function loadPositions()
+    {
+        $this->positions = $this->election->candidates()
+            ->select('position', 'position_name')
+            ->groupBy('position', 'position_name')
+            ->orderBy('position')
+            ->get()
+            ->toArray();
     }
 
     public function authenticate()
@@ -69,18 +83,26 @@ class VotingBooth extends Component
             return;
         }
 
-        if ($this->selectedCandidateId === 'no') {
-            // Record a "no" vote - we'll store it with candidate_id as null or create a special handling
-            Vote::create([
-                'election_id' => $this->election->id,
-                'candidate_id' => null,
-                'vote_hash' => hash('sha256', $this->voter->id . time() . rand()),
-            ]);
+        $currentPosition = $this->positions[$this->currentStep];
+        $this->votes[$currentPosition['position']] = $this->selectedCandidateId;
+
+        $this->selectedCandidateId = null;
+        $this->showConfirmation = false;
+
+        if ($this->currentStep < count($this->positions) - 1) {
+            $this->currentStep++;
         } else {
+            $this->submitAllVotes();
+        }
+    }
+
+    public function submitAllVotes()
+    {
+        foreach ($this->votes as $position => $candidateId) {
             Vote::create([
                 'election_id' => $this->election->id,
-                'candidate_id' => $this->selectedCandidateId,
-                'vote_hash' => hash('sha256', $this->voter->id . time() . rand()),
+                'candidate_id' => $candidateId === 'no' ? null : $candidateId,
+                'vote_hash' => hash('sha256', $this->voter->id . $position . time() . rand()),
             ]);
         }
 
@@ -89,8 +111,17 @@ class VotingBooth extends Component
             'voted_at' => now(),
         ]);
 
-        session()->flash('message', 'Vote cast successfully!');
+        session()->flash('message', 'All votes cast successfully!');
         return redirect()->route('election.vote', $this->election);
+    }
+
+    public function previousStep()
+    {
+        if ($this->currentStep > 0) {
+            $this->currentStep--;
+            $this->showConfirmation = false;
+            $this->selectedCandidateId = null;
+        }
     }
 
     public function cancelVote()
@@ -101,13 +132,23 @@ class VotingBooth extends Component
 
     public function logout()
     {
-        $this->reset(['voter', 'voterId', 'selectedCandidateId', 'showConfirmation']);
+        $this->reset(['voter', 'voterId', 'currentStep', 'votes', 'selectedCandidateId', 'showConfirmation']);
     }
 
     public function render()
     {
+        $candidates = [];
+        if ($this->voter && isset($this->positions[$this->currentStep])) {
+            $currentPosition = $this->positions[$this->currentStep];
+            $candidates = $this->election->candidates()
+                ->where('position', $currentPosition['position'])
+                ->get();
+        }
+
         return view('livewire.election.voting-booth', [
-            'candidates' => $this->election->candidates()->with('electionPosition')->get(),
+            'candidates' => $candidates,
+            'currentPosition' => $this->positions[$this->currentStep] ?? null,
+            'totalSteps' => count($this->positions),
         ]);
     }
 }
