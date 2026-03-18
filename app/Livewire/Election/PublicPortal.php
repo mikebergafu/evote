@@ -32,6 +32,6 @@ class PublicPortal extends Component
 
         return view('livewire.election.public-portal', [
             'elections' => $activeElections,
-        ])->layout('layouts.guest');
+        ])->layout('layouts.welcome');
     }
 }
