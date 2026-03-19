@@ -15,12 +15,29 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('All Elections') }}
-                    </flux:sidebar.item>
                     <flux:sidebar.item icon="plus-circle" :href="route('election.setup')" :current="request()->routeIs('election.setup')" wire:navigate>
                         {{ __('Create Election') }}
                     </flux:sidebar.item>
+                </flux:sidebar.group>
+
+                <flux:sidebar.group heading="📋 My Elections" class="grid">
+                    @php
+                        $elections = \App\Models\Election::latest()->take(5)->get();
+                    @endphp
+                    @forelse($elections as $election)
+                        <flux:sidebar.item icon="clipboard-document" :href="route('election.manage', $election)" :current="request()->routeIs('election.manage', $election)" wire:navigate>
+                            {{ Str::limit($election->name, 25) }}
+                        </flux:sidebar.item>
+                    @empty
+                        <flux:sidebar.item disabled>
+                            {{ __('No elections yet') }}
+                        </flux:sidebar.item>
+                    @endforelse
+                    @if($elections->count() >= 5)
+                        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" wire:navigate>
+                            {{ __('View All') }}
+                        </flux:sidebar.item>
+                    @endif
                 </flux:sidebar.group>
 
                 <flux:sidebar.group heading="⚙️ System" class="grid">
