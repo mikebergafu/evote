@@ -2,17 +2,24 @@
 
 namespace App\Livewire\Election;
 
+use App\Models\Election;
 use App\Models\PotentialVoter;
 use App\Services\SmsService;
 use Livewire\Component;
 
 class RegisterVoter extends Component
 {
+    public $election;
     public $title = '';
     public $full_name = '';
     public $email = '';
     public $mobile = '';
     public $registered = false;
+
+    public function mount($uuid)
+    {
+        $this->election = Election::where('uuid', $uuid)->firstOrFail();
+    }
 
     public function register()
     {
@@ -23,11 +30,12 @@ class RegisterVoter extends Component
             'mobile' => 'required|string|max:20',
         ]);
 
+        $validated['election_id'] = $this->election->id;
         $voter = PotentialVoter::create($validated);
 
         // Send SMS feedback
         $smsService = new SmsService();
-        $message = "Dear {$voter->title} {$voter->full_name}, your voter registration has been completed successfully. You will receive further updates via SMS. Thank you for registering!";
+        $message = "Dear {$voter->title} {$voter->full_name}, your voter registration for {$this->election->name} has been completed successfully. You will receive further updates via SMS. Thank you for registering!";
         $smsService->send($voter->mobile, $message);
 
         $this->registered = true;

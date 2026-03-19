@@ -8,7 +8,7 @@
             @if(!$registered)
                 <div class="mb-8">
                     <h1 class="font-display text-3xl md:text-4xl font-extrabold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">Voter Registration</h1>
-                    <p class="text-gray-600 dark:text-gray-400">Please provide your details below</p>
+                    <p class="text-gray-600 dark:text-gray-400">Register for: <strong>{{ $election->name }}</strong></p>
                     <div class="mt-4 flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
                         <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -77,9 +77,6 @@
                     </div>
                     <h2 class="font-display text-3xl font-extrabold text-[#1b1b18] dark:text-[#EDEDEC] mb-3">Registration Successful!</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-8">Thank you for registering. You will be notified when voting begins.</p>
-                    <button wire:click="$set('registered', false)" class="text-[#F53003] hover:text-[#d92a02] font-semibold transition-colors">
-                        Register Another Voter →
-                    </button>
                 </div>
             @endif
         </div>
