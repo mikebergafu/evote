@@ -19,6 +19,12 @@
                         {{ __('All Elections') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                <flux:sidebar.group heading="⚙️ System" class="grid">
+                    <flux:sidebar.item icon="users" href="/users" :current="request()->is('users')" wire:navigate>
+                        {{ __('Manage Users') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />

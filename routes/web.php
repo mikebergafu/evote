@@ -14,6 +14,7 @@ Route::get('/register-voter', \App\Livewire\Election\RegisterVoter::class)->name
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::view('users', 'users')->name('users');
     Route::get('/election/setup', Setup::class)->name('election.setup');
     Route::get('/election/{election}/manage', Manage::class)->name('election.manage');
 });
