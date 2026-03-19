@@ -62,6 +62,17 @@ class VotingBooth extends Component
 
         $currentDevice = DeviceFingerprint::generate();
 
+        // Check if this device has already voted in this election
+        $deviceAlreadyVoted = Voter::where('election_id', $this->election->id)
+            ->where('device_fingerprint', $currentDevice)
+            ->where('has_voted', true)
+            ->exists();
+
+        if ($deviceAlreadyVoted) {
+            $this->addError('voterId', 'This device has already been used to vote in this election.');
+            return;
+        }
+
         if (!$voter->device_registered) {
             $voter->update([
                 'device_fingerprint' => $currentDevice,
