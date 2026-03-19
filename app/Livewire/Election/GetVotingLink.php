@@ -22,6 +22,20 @@ class GetVotingLink extends Component
             return;
         }
 
+        $election = $voter->election;
+        
+        // Check if voting has started
+        if (now()->isBefore($election->starts_at)) {
+            $this->addError('phone', 'Voting has not started yet. Voting starts on ' . $election->starts_at->format('M d, Y H:i'));
+            return;
+        }
+        
+        // Check if voting has ended
+        if (now()->isAfter($election->ends_at)) {
+            $this->addError('phone', 'Voting has ended. Voting ended on ' . $election->ends_at->format('M d, Y H:i'));
+            return;
+        }
+
         $this->voterName = $voter->name;
         $this->votingLink = route('election.vote', $voter->election_id);
     }

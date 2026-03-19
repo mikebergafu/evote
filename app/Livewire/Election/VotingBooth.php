@@ -21,6 +21,15 @@ class VotingBooth extends Component
 
     public function mount(Election $election)
     {
+        // Check if voting period is valid
+        if (now()->isBefore($election->starts_at)) {
+            abort(403, 'Voting has not started yet. Voting starts on ' . $election->starts_at->format('M d, Y H:i'));
+        }
+        
+        if (now()->isAfter($election->ends_at)) {
+            abort(403, 'Voting has ended. Voting ended on ' . $election->ends_at->format('M d, Y H:i'));
+        }
+        
         abort_unless($election->isActive(), 403, 'Election is not active.');
         $this->election = $election;
         $this->loadPositions();

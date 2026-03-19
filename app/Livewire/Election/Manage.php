@@ -186,9 +186,13 @@ class Manage extends Component
             'phone' => $potentialVoter->mobile,
         ]);
         
-        // Send SMS with Voter ID
+        // Send SMS with Voter ID and voting link
         $smsService = new \App\Services\SmsService();
-        $message = "Dear {$potentialVoter->full_name}, your voter registration for {$this->election->name} has been approved. Your Voter ID is: {$voterId}. Keep this ID safe for voting.";
+        $votingLink = route('get.voting.link');
+        $startDate = $this->election->starts_at->format('M d, Y H:i');
+        $endDate = $this->election->ends_at->format('M d, Y H:i');
+        
+        $message = "Dear {$potentialVoter->full_name}, your voter registration for {$this->election->name} has been approved. Your Voter ID is: {$voterId}. Voting Period: {$startDate} to {$endDate}. Voting Link: {$votingLink}";
         $smsService->send($potentialVoter->mobile, $message);
         
         $potentialVoter->delete();
