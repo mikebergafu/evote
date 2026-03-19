@@ -156,6 +156,12 @@ class Manage extends Component
         session()->flash('message', 'Election closed!');
     }
 
+    public function deleteElection()
+    {
+        $this->election->delete();
+        return redirect()->route('dashboard')->with('message', 'Election deleted successfully!');
+    }
+
     public function render()
     {
         return view('livewire.election.manage', [
