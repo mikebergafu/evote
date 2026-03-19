@@ -17,11 +17,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('users', 'users')->name('users');
     Route::get('/elections', \App\Livewire\Election\Index::class)->name('elections.index');
     Route::get('/election/setup', Setup::class)->name('election.setup');
-    Route::get('/election/{election}/manage', Manage::class)->name('election.manage');
+    Route::get('/election/{election:uuid}/manage', Manage::class)->name('election.manage');
 });
 
 
-Route::get('/election/{election}/vote', VotingBooth::class)->name('election.vote');
-Route::get('/election/{election}/results', Results::class)->name('election.results');
+Route::get('/election/{election:uuid}/vote', VotingBooth::class)->name('election.vote');
+Route::get('/election/{election:uuid}/results', Results::class)->name('election.results');
 
 require __DIR__.'/settings.php';
