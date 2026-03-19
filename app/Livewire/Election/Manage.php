@@ -186,9 +186,14 @@ class Manage extends Component
             'phone' => $potentialVoter->mobile,
         ]);
         
+        // Send SMS with Voter ID
+        $smsService = new \App\Services\SmsService();
+        $message = "Dear {$potentialVoter->full_name}, your voter registration for {$this->election->name} has been approved. Your Voter ID is: {$voterId}. Keep this ID safe for voting.";
+        $smsService->send($potentialVoter->mobile, $message);
+        
         $potentialVoter->delete();
         
-        session()->flash('message', 'Voter approved successfully! Voter ID: ' . $voterId);
+        session()->flash('message', 'Voter approved successfully! Voter ID: ' . $voterId . ' (SMS sent)');
     }
 
     public function rejectPotentialVoter($potentialVoterId)
