@@ -1,7 +1,7 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
     <div class="max-w-7xl mx-auto space-y-4">
         <!-- Header -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-start justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $election->name }} - Results</h1>
@@ -10,37 +10,31 @@
             </div>
 
             <!-- Stats -->
-            <div class="grid grid-cols-3 gap-3 mt-4">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
-                    <p class="text-2xl font-bold">{{ $totalVotes }}</p>
-                    <p class="text-blue-100 text-xs">Total Votes</p>
+            <div class="grid grid-cols-3 gap-3 mt-6">
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalVotes }}</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-xs">Total Votes</p>
                 </div>
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
-                    <p class="text-2xl font-bold">{{ $voterTurnout }}</p>
-                    <p class="text-green-100 text-xs">Participated</p>
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $voterTurnout }}</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-xs">Participated</p>
                 </div>
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white">
-                    <p class="text-2xl font-bold">{{ $totalVoters > 0 ? round(($voterTurnout / $totalVoters) * 100, 1) : 0 }}%</p>
-                    <p class="text-purple-100 text-xs">Turnout</p>
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalVoters > 0 ? round(($voterTurnout / $totalVoters) * 100, 1) : 0 }}%</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-xs">Turnout</p>
                 </div>
             </div>
         </div>
 
         <!-- Results by Position -->
         @foreach($candidatesByPosition as $positionName => $candidates)
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div class="bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                            <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"/>
-                        </svg>
-                        <h2 class="text-lg font-bold text-white">{{ $positionName ?? 'Other Candidates' }}</h2>
-                    </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gray-900 dark:bg-gray-950 px-4 py-3 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-white">{{ $positionName ?? 'Other Candidates' }}</h2>
                     @php 
                         $positionTotalVotes = $candidates->sum('votes_count'); 
                     @endphp
-                    <span class="text-white text-sm font-semibold bg-white/20 px-3 py-1 rounded-full">
+                    <span class="text-white text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
                         {{ $positionTotalVotes }} / {{ $totalVoters }} votes
                     </span>
                 </div>
@@ -50,14 +44,14 @@
                         $sortedCandidates = $candidates->sortByDesc('votes_count');
                     @endphp
                     @forelse($sortedCandidates as $index => $candidate)
-                        <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-3">
+                        <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-3">
                                     @if($index === 0 && $candidate->votes_count > 0)<span class="text-2xl">🏆</span>@endif
                                     @if($candidate->photo)
                                         <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-12 h-12 rounded-lg object-cover">
                                     @else
-                                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-blue-400 rounded-lg flex items-center justify-center text-white font-bold">
+                                        <div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-700 dark:text-gray-300 font-bold">
                                             {{ strtoupper(substr($candidate->name, 0, 2)) }}
                                         </div>
                                     @endif
@@ -72,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full" style="width: {{ $positionTotalVotes > 0 ? ($candidate->votes_count / $positionTotalVotes) * 100 : 0 }}%"></div>
+                                <div class="bg-gray-900 dark:bg-gray-600 h-2 rounded-full" style="width: {{ $positionTotalVotes > 0 ? ($candidate->votes_count / $positionTotalVotes) * 100 : 0 }}%"></div>
                             </div>
                         </div>
                     @empty
