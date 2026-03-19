@@ -139,5 +139,53 @@
                 </div>
             </div>
         </div>
+
+        <!-- All Elections -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">All Elections</h3>
+                <a href="{{ route('election.setup') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create Election
+                </a>
+            </div>
+            <div class="space-y-3">
+                @forelse($elections as $election)
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-900 dark:text-white">{{ $election->name }}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $election->description }}</p>
+                            <div class="flex items-center gap-4 mt-2">
+                                <span class="text-xs px-3 py-1 rounded-lg font-semibold
+                                    @if($election->status === 'setup') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
+                                    @elseif($election->status === 'active') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+                                    @else bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 @endif">
+                                    {{ ucfirst($election->status) }}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-500">{{ $election->starts_at->format('M d, Y') }}</span>
+                            </div>
+                        </div>
+                        <a href="{{ route('election.manage', $election) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
+                            Manage
+                        </a>
+                    </div>
+                @empty
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">No elections yet</p>
+                        <a href="{{ route('election.setup') }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Create Your First Election
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+        </div>
     </div>
 </x-layouts::app>
