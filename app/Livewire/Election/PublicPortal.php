@@ -52,7 +52,7 @@ class PublicPortal extends Component
             ->with('prefilledVoterId', $this->voterId);
     }
 
-    public function reset()
+    public function resetVoter()
     {
         $this->reset(['voterId', 'voter', 'elections', 'selectedElection']);
     }

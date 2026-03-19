@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 @if($voter)
-                    <button wire:click="reset" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all">
+                    <button wire:click="resetVoter" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all">
                         Change Voter ID
                     </button>
                 @endif
