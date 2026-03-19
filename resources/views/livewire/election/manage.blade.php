@@ -226,6 +226,9 @@
                                 No candidates added yet
                             </div>
                         @endforelse
+                        <div class="mt-4">
+                            {{ $candidates->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -262,6 +265,9 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="mt-4">
+                        {{ $potentialVoters->links() }}
+                    </div>
                 </div>
             </div>
             @endif
@@ -330,6 +336,9 @@
                                 No voters added yet
                             </div>
                         @endforelse
+                        <div class="mt-4">
+                            {{ $voters->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

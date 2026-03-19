@@ -7,10 +7,11 @@ use App\Models\Voter;
 use App\Models\Candidate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class Manage extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public Election $election;
     public $showRegistrationLink = false;
@@ -199,11 +200,11 @@ class Manage extends Component
     public function render()
     {
         return view('livewire.election.manage', [
-            'voters' => $this->election->voters()->get(),
-            'candidates' => $this->election->candidates()->with('electionPosition')->get(),
+            'voters' => $this->election->voters()->paginate(10, pageName: 'votersPage'),
+            'candidates' => $this->election->candidates()->with('electionPosition')->paginate(10, pageName: 'candidatesPage'),
             'positions' => $this->election->positions,
             'users' => \App\Models\User::orderBy('name')->get(),
-            'potentialVoters' => \App\Models\PotentialVoter::where('election_id', $this->election->id)->latest()->get(),
+            'potentialVoters' => \App\Models\PotentialVoter::where('election_id', $this->election->id)->latest()->paginate(10, pageName: 'pendingPage'),
         ]);
     }
 }
