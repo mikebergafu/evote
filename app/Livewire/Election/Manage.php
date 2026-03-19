@@ -20,6 +20,7 @@ class Manage extends Component
     public $candidateBio = '';
     public $candidatePhoto = null;
     public $candidatePositionId = null;
+    public $candidateUserId = null;
     public $positionTitle = '';
     public $positionDescription = '';
 
@@ -72,6 +73,7 @@ class Manage extends Component
             'candidateBio' => 'nullable|string',
             'candidatePhoto' => 'nullable|image|max:2048',
             'candidatePositionId' => 'nullable|exists:positions,id',
+            'candidateUserId' => 'nullable|exists:users,id',
         ]);
 
         $photoPath = null;
@@ -83,6 +85,7 @@ class Manage extends Component
 
         Candidate::create([
             'election_id' => $this->election->id,
+            'user_id' => $this->candidateUserId,
             'position_id' => $this->candidatePositionId,
             'name' => $this->candidateName,
             'bio' => $this->candidateBio,
@@ -90,7 +93,7 @@ class Manage extends Component
             'position' => $position,
         ]);
 
-        $this->reset(['candidateName', 'candidateBio', 'candidatePhoto', 'candidatePositionId']);
+        $this->reset(['candidateName', 'candidateBio', 'candidatePhoto', 'candidatePositionId', 'candidateUserId']);
         $this->election->refresh();
         session()->flash('message', 'Candidate added successfully!');
     }
@@ -168,6 +171,7 @@ class Manage extends Component
             'voters' => $this->election->voters()->get(),
             'candidates' => $this->election->candidates()->with('electionPosition')->get(),
             'positions' => $this->election->positions,
+            'users' => \App\Models\User::orderBy('name')->get(),
         ]);
     }
 }

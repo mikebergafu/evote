@@ -132,6 +132,12 @@
                                 Add New Candidate
                             </h3>
                             <input type="text" wire:model="candidateName" placeholder="Candidate Name" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white" required>
+                            <select wire:model="candidateUserId" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+                                <option value="">Link to User (optional)</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                @endforeach
+                            </select>
                             <select wire:model="candidatePositionId" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
                                 <option value="">Select Position (optional)</option>
                                 @foreach($positions as $pos)
