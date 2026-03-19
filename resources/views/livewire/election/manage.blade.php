@@ -256,7 +256,7 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Registered: {{ $potentialVoter->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="flex gap-2">
-                                <button wire:click="approvePotentialVoter({{ $potentialVoter->id }})" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
+                                <button wire:click="approvePotentialVoter({{ $potentialVoter->id }})" wire:confirm="Approve {{ $potentialVoter->full_name }} as a voter? A Voter ID will be generated." class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
                                     Approve
                                 </button>
                                 <button wire:click="rejectPotentialVoter({{ $potentialVoter->id }})" wire:confirm="Are you sure you want to reject this registration?" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
