@@ -215,7 +215,7 @@ class Manage extends Component
     private function sendVotingLinkSMS($voter)
     {
         $smsService = new \App\Services\SmsService();
-        $votingLink = route('election.vote', $this->election->id) . '?voter_id=' . urlencode($voter->voter_id);
+        $votingLink = route('election.vote', $this->election->uuid) . '?voter_id=' . urlencode($voter->voter_id);
         $startDate = $this->election->starts_at->format('M d, Y H:i');
         $endDate = $this->election->ends_at->format('M d, Y H:i');
         
