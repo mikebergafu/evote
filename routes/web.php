@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/election/{election}/manage', Manage::class)->name('election.manage');
 });
 
+
 Route::get('/election/{election}/vote', VotingBooth::class)->name('election.vote');
 Route::get('/election/{election}/results', Results::class)->name('election.results');
 
