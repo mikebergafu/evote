@@ -230,6 +230,42 @@
                 </div>
             </div>
 
+            <!-- Pending Voter Registrations -->
+            @if($potentialVoters->count() > 0)
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-white">Pending Registrations ({{ $potentialVoters->count() }})</h2>
+                    </div>
+                </div>
+                <div class="p-6 space-y-3">
+                    @foreach($potentialVoters as $potentialVoter)
+                        <div class="bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-4 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-gray-900 dark:text-white">{{ $potentialVoter->title }} {{ $potentialVoter->full_name }}</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $potentialVoter->email }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $potentialVoter->mobile }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Registered: {{ $potentialVoter->created_at->diffForHumans() }}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button wire:click="approvePotentialVoter({{ $potentialVoter->id }})" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
+                                    Approve
+                                </button>
+                                <button wire:click="rejectPotentialVoter({{ $potentialVoter->id }})" wire:confirm="Are you sure you want to reject this registration?" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             <!-- Voters Section -->
             <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div class="bg-gradient-to-r from-green-500 to-teal-500 px-6 py-4 flex items-center justify-between">

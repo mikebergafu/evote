@@ -172,6 +172,30 @@ class Manage extends Component
         $this->dispatch('link-copied');
     }
 
+    public function approvePotentialVoter($potentialVoterId)
+    {
+        $potentialVoter = \App\Models\PotentialVoter::findOrFail($potentialVoterId);
+        
+        $voterId = 'V' . str_pad($this->election->voters()->count() + 1, 6, '0', STR_PAD_LEFT);
+        
+        Voter::create([
+            'election_id' => $this->election->id,
+            'voter_id' => $voterId,
+            'name' => $potentialVoter->full_name,
+            'phone' => $potentialVoter->mobile,
+        ]);
+        
+        $potentialVoter->delete();
+        
+        session()->flash('message', 'Voter approved successfully! Voter ID: ' . $voterId);
+    }
+
+    public function rejectPotentialVoter($potentialVoterId)
+    {
+        \App\Models\PotentialVoter::findOrFail($potentialVoterId)->delete();
+        session()->flash('message', 'Voter registration rejected.');
+    }
+
     public function render()
     {
         return view('livewire.election.manage', [
@@ -179,6 +203,7 @@ class Manage extends Component
             'candidates' => $this->election->candidates()->with('electionPosition')->get(),
             'positions' => $this->election->positions,
             'users' => \App\Models\User::orderBy('name')->get(),
+            'potentialVoters' => \App\Models\PotentialVoter::where('election_id', $this->election->id)->latest()->get(),
         ]);
     }
 }
