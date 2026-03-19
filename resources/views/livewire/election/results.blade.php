@@ -41,7 +41,7 @@
                         $positionTotalVotes = $candidates->sum('votes_count'); 
                     @endphp
                     <span class="text-white text-sm font-semibold bg-white/20 px-3 py-1 rounded-full">
-                        {{ $positionTotalVotes }} {{ Str::plural('vote', $positionTotalVotes) }}
+                        {{ $positionTotalVotes }} / {{ $voterTurnout }} votes
                     </span>
                 </div>
 
