@@ -23,19 +23,31 @@
                 <flux:sidebar.group heading="📋 My Elections" class="grid">
                     @php
                         $elections = \App\Models\Election::latest()->take(5)->get();
+                        $totalCount = \App\Models\Election::count();
                     @endphp
                     @forelse($elections as $election)
                         <flux:sidebar.item icon="clipboard-document" :href="route('election.manage', $election)" :current="request()->routeIs('election.manage', $election)" wire:navigate>
-                            {{ Str::limit($election->name, 25) }}
+                            <div class="flex items-center justify-between w-full">
+                                <span class="truncate">{{ Str::limit($election->name, 20) }}</span>
+                                <span class="text-xs px-2 py-0.5 rounded-full
+                                    @if($election->status === 'active') bg-green-500/20 text-green-600 dark:text-green-400
+                                    @elseif($election->status === 'setup') bg-yellow-500/20 text-yellow-600 dark:text-yellow-400
+                                    @else bg-gray-500/20 text-gray-600 dark:text-gray-400 @endif">
+                                    {{ ucfirst($election->status) }}
+                                </span>
+                            </div>
                         </flux:sidebar.item>
                     @empty
                         <flux:sidebar.item disabled>
                             {{ __('No elections yet') }}
                         </flux:sidebar.item>
                     @endforelse
-                    @if($elections->count() >= 5)
+                    @if($totalCount > 5)
                         <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" wire:navigate>
-                            {{ __('View All') }}
+                            <div class="flex items-center justify-between w-full">
+                                <span>{{ __('View All') }}</span>
+                                <span class="text-xs bg-blue-500/20 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">{{ $totalCount }}</span>
+                            </div>
                         </flux:sidebar.item>
                     @endif
                 </flux:sidebar.group>
