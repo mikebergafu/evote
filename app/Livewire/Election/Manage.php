@@ -13,6 +13,7 @@ class Manage extends Component
     use WithFileUploads;
 
     public Election $election;
+    public $showRegistrationLink = false;
     public $voterName = '';
     public $voterId = '';
     public $voterPhone = '';
@@ -163,6 +164,12 @@ class Manage extends Component
     {
         $this->election->delete();
         return redirect()->route('dashboard')->with('message', 'Election deleted successfully!');
+    }
+
+    public function copyRegistrationLink()
+    {
+        $this->showRegistrationLink = true;
+        $this->dispatch('link-copied');
     }
 
     public function render()

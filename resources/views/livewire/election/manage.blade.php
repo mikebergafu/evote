@@ -53,6 +53,41 @@
             </div>
         @endif
 
+        <!-- Voter Registration Link -->
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    Voter Registration Link
+                </h3>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" readonly value="{{ route('register.voter', ['uuid' => $election->uuid]) }}" id="registration-link" class="flex-1 border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm">
+                <button onclick="copyToClipboard()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Copy
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Share this link with voters to register for this election</p>
+        </div>
+
+        <script>
+            function copyToClipboard() {
+                const input = document.getElementById('registration-link');
+                input.select();
+                document.execCommand('copy');
+                alert('Registration link copied to clipboard!');
+            }
+        </script>
+                </svg>
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Positions Section -->
         @if($election->status === 'setup')
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
