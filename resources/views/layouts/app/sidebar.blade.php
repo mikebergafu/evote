@@ -15,6 +15,9 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="clipboard-document-list" :href="route('elections.index')" :current="request()->routeIs('elections.index')" wire:navigate>
+                        {{ __('All Elections') }}
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="plus-circle" :href="route('election.setup')" :current="request()->routeIs('election.setup')" wire:navigate>
                         {{ __('Create Election') }}
                     </flux:sidebar.item>
@@ -43,7 +46,7 @@
                         </flux:sidebar.item>
                     @endforelse
                     @if($totalCount > 5)
-                        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" wire:navigate>
+                        <flux:sidebar.item icon="clipboard-document-list" :href="route('elections.index')" wire:navigate>
                             <div class="flex items-center justify-between w-full">
                                 <span>{{ __('View All') }}</span>
                                 <span class="text-xs bg-blue-500/20 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">{{ $totalCount }}</span>
