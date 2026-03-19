@@ -34,8 +34,10 @@ class VotingBooth extends Component
         $this->election = $election;
         $this->loadPositions();
         
-        // Prefill voter ID if coming from public portal
-        if (session()->has('prefilledVoterId')) {
+        // Prefill voter ID from URL parameter or session
+        if (request()->has('voter_id')) {
+            $this->voterId = request('voter_id');
+        } elseif (session()->has('prefilledVoterId')) {
             $this->voterId = session('prefilledVoterId');
             session()->forget('prefilledVoterId');
         }

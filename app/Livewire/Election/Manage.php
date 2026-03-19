@@ -179,25 +179,37 @@ class Manage extends Component
         
         $voterId = 'V' . str_pad($this->election->voters()->count() + 1, 6, '0', STR_PAD_LEFT);
         
-        Voter::create([
+        $voter = Voter::create([
             'election_id' => $this->election->id,
             'voter_id' => $voterId,
             'name' => $potentialVoter->full_name,
             'phone' => $potentialVoter->mobile,
         ]);
         
-        // Send SMS with Voter ID and voting link
-        $smsService = new \App\Services\SmsService();
-        $votingLink = route('get.voting.link');
-        $startDate = $this->election->starts_at->format('M d, Y H:i');
-        $endDate = $this->election->ends_at->format('M d, Y H:i');
-        
-        $message = "Dear {$potentialVoter->full_name}, your voter registration for {$this->election->name} has been approved. Your Voter ID is: {$voterId}. Voting Period: {$startDate} to {$endDate}. Voting Link: {$votingLink}";
-        $smsService->send($potentialVoter->mobile, $message);
+        // Send SMS with direct voting link
+        $this->sendVotingLinkSMS($voter);
         
         $potentialVoter->delete();
         
         session()->flash('message', 'Voter approved successfully! Voter ID: ' . $voterId . ' (SMS sent)');
+    }
+
+    public function resendVotingLink($voterId)
+    {
+        $voter = Voter::findOrFail($voterId);
+        $this->sendVotingLinkSMS($voter);
+        session()->flash('message', 'Voting link resent to ' . $voter->name);
+    }
+
+    private function sendVotingLinkSMS($voter)
+    {
+        $smsService = new \App\Services\SmsService();
+        $votingLink = route('election.vote', $this->election->id) . '?voter_id=' . urlencode($voter->voter_id);
+        $startDate = $this->election->starts_at->format('M d, Y H:i');
+        $endDate = $this->election->ends_at->format('M d, Y H:i');
+        
+        $message = "Dear {$voter->name}, your Voter ID is: {$voter->voter_id}. Voting Period: {$startDate} to {$endDate}. Vote here: {$votingLink}";
+        $smsService->send($voter->phone, $message);
     }
 
     public function rejectPotentialVoter($potentialVoterId)
