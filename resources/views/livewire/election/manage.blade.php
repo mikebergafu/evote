@@ -83,10 +83,6 @@
                 alert('Registration link copied to clipboard!');
             }
         </script>
-                </svg>
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Positions Section -->
         @if($election->status === 'setup')
