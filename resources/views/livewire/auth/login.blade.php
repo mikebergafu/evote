@@ -70,26 +70,5 @@
                 </span>
             </flux:button>
         </form>
-
-        @if (Route::has('register'))
-            <div class="relative my-2">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-zinc-200 dark:border-zinc-700"></div>
-                </div>
-                <div class="relative flex justify-center text-xs">
-                    <span class="px-3 py-1 bg-white dark:bg-zinc-900 text-zinc-500 rounded-full">New to eVoter?</span>
-                </div>
-            </div>
-            
-            <div class="text-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">Don't have an account yet?</p>
-                <flux:link :href="route('register')" wire:navigate class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
-                    {{ __('Create your account') }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </flux:link>
-            </div>
-        @endif
     </div>
 </x-layouts::auth>

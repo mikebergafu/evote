@@ -117,14 +117,9 @@
                                     <span class="relative z-10">Dashboard</span>
                                 </a>
                             @else
-                                <a href="{{ route('login') }}" class="hidden sm:block px-5 py-2.5 text-sm font-medium hover:text-[#F53003] transition-colors">
-                                    Log in
+                                <a href="{{ route('login') }}" class="cta-button relative px-6 py-2.5 bg-[#F53003] hover:bg-[#d92a02] text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl text-sm">
+                                    <span class="relative z-10">Admin Login</span>
                                 </a>
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="cta-button relative px-6 py-2.5 bg-[#F53003] hover:bg-[#d92a02] text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl text-sm">
-                                        <span class="relative z-10">Get Started</span>
-                                    </a>
-                                @endif
                             @endauth
                         @endif
                     </div>
