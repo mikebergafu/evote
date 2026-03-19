@@ -16,23 +16,17 @@ class Results extends Component
 
     public function render()
     {
-        $positions = $this->election->positions()
-            ->with(['candidates' => function($query) {
-                $query->withCount('votes')->orderByDesc('votes_count');
-            }])
-            ->get();
-
-        $unassignedCandidates = $this->election->candidates()
-            ->whereNull('position_id')
+        // Group candidates by position
+        $candidatesByPosition = $this->election->candidates()
             ->withCount('votes')
-            ->orderByDesc('votes_count')
-            ->get();
+            ->orderBy('position')
+            ->get()
+            ->groupBy('position_name');
 
         $totalVotes = $this->election->votes()->count();
 
         return view('livewire.election.results', [
-            'positions' => $positions,
-            'unassignedCandidates' => $unassignedCandidates,
+            'candidatesByPosition' => $candidatesByPosition,
             'totalVotes' => $totalVotes,
             'totalVoters' => $this->election->voters()->count(),
             'voterTurnout' => $this->election->voters()->where('has_voted', true)->count(),
