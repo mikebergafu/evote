@@ -155,6 +155,6 @@ class VotingBooth extends Component
             'candidates' => $candidates,
             'currentPosition' => $this->positions[$this->currentStep] ?? null,
             'totalSteps' => count($this->positions),
-        ]);
+        ])->layout('layouts.welcome');
     }
 }

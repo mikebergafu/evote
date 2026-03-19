@@ -36,6 +36,6 @@ class Results extends Component
             'totalVotes' => $totalVotes,
             'totalVoters' => $this->election->voters()->count(),
             'voterTurnout' => $this->election->voters()->where('has_voted', true)->count(),
-        ]);
+        ])->layout('layouts.welcome');
     }
 }
