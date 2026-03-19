@@ -141,5 +141,8 @@
                 @endif
             </div>
         </div>
+
+        <!-- User Management Section -->
+        <livewire:dashboard.user-management />
     </div>
 </x-layouts::app>
