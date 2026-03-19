@@ -43,13 +43,21 @@ class Manage extends Component
     {
         $this->validate([
             'voterName' => 'required|string|max:255',
-            'voterId' => 'required|string|max:255',
+            'voterId' => 'nullable|string|max:255',
             'voterPhone' => 'nullable|string|max:20',
         ]);
 
+        // Generate random secure voter ID if not provided
+        $voterId = $this->voterId;
+        if (empty($voterId)) {
+            do {
+                $voterId = 'V' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
+            } while (Voter::where('voter_id', $voterId)->exists());
+        }
+
         Voter::create([
             'election_id' => $this->election->id,
-            'voter_id' => $this->voterId,
+            'voter_id' => $voterId,
             'name' => $this->voterName,
             'phone' => $this->voterPhone,
         ]);
@@ -177,7 +185,10 @@ class Manage extends Component
     {
         $potentialVoter = \App\Models\PotentialVoter::findOrFail($potentialVoterId);
         
-        $voterId = 'V' . str_pad($this->election->voters()->count() + 1, 6, '0', STR_PAD_LEFT);
+        // Generate random secure voter ID
+        do {
+            $voterId = 'V' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
+        } while (Voter::where('voter_id', $voterId)->exists());
         
         $voter = Voter::create([
             'election_id' => $this->election->id,
