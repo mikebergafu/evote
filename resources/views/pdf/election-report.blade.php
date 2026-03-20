@@ -72,7 +72,7 @@
                     <div class="stat-label">REGISTERED VOTERS</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">{{ $totalVotes }}</div>
+                    <div class="stat-value">{{ $totalVoted }}</div>
                     <div class="stat-label">VOTES CAST</div>
                 </div>
                 <div class="stat-item">

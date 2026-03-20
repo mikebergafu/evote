@@ -35,8 +35,8 @@ class ElectionReportController extends Controller
         }
 
         $totalVoters = $election->voters()->count();
-        $totalVotes = $election->votes()->count();
-        $turnoutRate = $totalVoters > 0 ? round(($totalVotes / $totalVoters) * 100, 2) : 0;
+        $totalVoted = $election->voters()->where('has_voted', true)->count();
+        $turnoutRate = $totalVoters > 0 ? round(($totalVoted / $totalVoters) * 100, 2) : 0;
 
         $votingTimeline = $election->votes()
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
@@ -46,6 +46,6 @@ class ElectionReportController extends Controller
 
         $voterList = $election->voters()->orderBy('name')->get();
 
-        return compact('election', 'positions', 'totalVoters', 'totalVotes', 'turnoutRate', 'votingTimeline', 'voterList');
+        return compact('election', 'positions', 'totalVoters', 'totalVoted', 'turnoutRate', 'votingTimeline', 'voterList');
     }
 }
