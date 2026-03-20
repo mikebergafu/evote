@@ -7,29 +7,33 @@
                 <!-- Tabs -->
                 <div class="border-b border-gray-200 dark:border-gray-700">
                     <nav class="flex -mb-px">
-                        <button onclick="showTab('profile')" id="tab-profile" class="tab-button active px-6 py-4 text-sm font-semibold border-b-2 border-blue-500 text-blue-600 dark:text-blue-400">
-                            Profile
+                        <button onclick="showTab('user')" id="tab-user" class="tab-button active px-6 py-4 text-sm font-semibold border-b-2 border-blue-500 text-blue-600 dark:text-blue-400">
+                            User Settings
                         </button>
+                        @if(auth()->user()->role === 'admin')
                         <button onclick="showTab('system')" id="tab-system" class="tab-button px-6 py-4 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                             System Settings
                         </button>
+                        @endif
                     </nav>
                 </div>
 
                 <!-- Tab Content -->
                 <div class="p-6">
-                    <!-- Profile Tab -->
-                    <div id="content-profile" class="tab-content">
+                    <!-- User Settings Tab -->
+                    <div id="content-user" class="tab-content">
                         <livewire:settings.update-profile />
                         <div class="mt-6">
                             <livewire:settings.update-password />
                         </div>
                     </div>
 
-                    <!-- System Settings Tab -->
+                    <!-- System Settings Tab (Admin Only) -->
+                    @if(auth()->user()->role === 'admin')
                     <div id="content-system" class="tab-content hidden">
                         <livewire:settings.notifications />
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
