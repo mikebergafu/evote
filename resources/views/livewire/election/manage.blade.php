@@ -302,8 +302,8 @@
                                 Add New Voter
                             </h3>
                             <input type="text" wire:model="voterName" placeholder="Voter Name" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white" required>
-                            <input type="text" wire:model="voterId" placeholder="Voter ID" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white" required>
                             <input type="tel" wire:model="voterPhone" placeholder="Phone Number (optional)" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Voter ID will be auto-generated</p>
                             <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white px-4 py-3 rounded-xl font-semibold shadow-lg transition-all">
                                 Add Voter
                             </button>

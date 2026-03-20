@@ -43,17 +43,13 @@ class Manage extends Component
     {
         $this->validate([
             'voterName' => 'required|string|max:255',
-            'voterId' => 'nullable|string|max:255',
             'voterPhone' => 'nullable|string|max:20',
         ]);
 
-        // Generate random secure voter ID if not provided
-        $voterId = $this->voterId;
-        if (empty($voterId)) {
-            do {
-                $voterId = 'V' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
-            } while (Voter::where('voter_id', $voterId)->exists());
-        }
+        // Auto-generate random secure voter ID
+        do {
+            $voterId = 'V' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
+        } while (Voter::where('voter_id', $voterId)->exists());
 
         Voter::create([
             'election_id' => $this->election->id,
@@ -62,9 +58,9 @@ class Manage extends Component
             'phone' => $this->voterPhone,
         ]);
 
-        $this->reset(['voterName', 'voterId', 'voterPhone']);
+        $this->reset(['voterName', 'voterPhone']);
         $this->election->refresh();
-        session()->flash('message', 'Voter added successfully!');
+        session()->flash('message', 'Voter added successfully! Voter ID: ' . $voterId);
     }
 
     public function removeVoter($voterId)
