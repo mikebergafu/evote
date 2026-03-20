@@ -27,16 +27,13 @@
                     <flux:sidebar.item icon="users" href="/users" :current="request()->is('users')" wire:navigate>
                         {{ __('Manage Users') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="cog-6-tooth" :href="route('settings')" :current="request()->routeIs('settings')" wire:navigate>
-                        {{ __('System Settings') }}
-                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>
+                <flux:sidebar.item icon="cog" :href="route('settings')" :current="request()->routeIs('settings')" wire:navigate>
                     {{ __('Settings') }}
                 </flux:sidebar.item>
             </flux:sidebar.nav>
