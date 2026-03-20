@@ -16,28 +16,32 @@ class Results extends Component
 
     public function render()
     {
-        // Group candidates by position with vote counts
-        $candidatesByPosition = $this->election->candidates()
-            ->withCount('votes')
-            ->orderBy('position')
-            ->get()
-            ->groupBy('position_name');
-
-        // Count No votes per position
-        $noVotesByPosition = [];
-        foreach ($candidatesByPosition as $positionName => $candidates) {
-            $position = $candidates->first()->position;
-            $noVotesByPosition[$positionName] = $this->election->votes()
-                ->where('position', $position)
+        // Get positions with their candidates
+        $positions = $this->election->positions()->orderBy('order')->get();
+        
+        $positionResults = [];
+        foreach ($positions as $position) {
+            $candidates = $this->election->candidates()
+                ->where('position_id', $position->id)
+                ->withCount('votes')
+                ->get();
+            
+            $noVotes = $this->election->votes()
+                ->where('position', $position->id)
                 ->whereNull('candidate_id')
                 ->count();
+            
+            $positionResults[] = [
+                'position' => $position,
+                'candidates' => $candidates,
+                'noVotes' => $noVotes,
+            ];
         }
 
         $totalVotes = $this->election->votes()->count();
 
         return view('livewire.election.results', [
-            'candidatesByPosition' => $candidatesByPosition,
-            'noVotesByPosition' => $noVotesByPosition,
+            'positionResults' => $positionResults,
             'totalVotes' => $totalVotes,
             'totalVoters' => $this->election->voters()->count(),
             'voterTurnout' => $this->election->voters()->where('has_voted', true)->count(),

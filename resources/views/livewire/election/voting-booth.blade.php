@@ -91,7 +91,10 @@
                 <!-- Voting Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-8">
                     <div class="text-center mb-4 sm:mb-6">
-                        <h2 class="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $currentPosition['position_name'] ?? 'Position' }}</h2>
+                        <h2 class="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $currentPosition['title'] ?? 'Position' }}</h2>
+                        @if($currentPosition['description'] ?? null)
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ $currentPosition['description'] }}</p>
+                        @endif
                         <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                             {{ $isSingleCandidate ? 'Vote Yes or No for this candidate' : 'Select your preferred candidate' }}
                         </p>
@@ -191,7 +194,7 @@
                             </svg>
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Confirm Your Vote</h2>
-                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">Position: <span class="font-bold">{{ $currentPosition['position_name'] }}</span></p>
+                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">Position: <span class="font-bold">{{ $currentPosition['title'] }}</span></p>
                         <div class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6 mb-6">
                             <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">You are voting:</p>
                             @if($selectedCandidateId === 'no')

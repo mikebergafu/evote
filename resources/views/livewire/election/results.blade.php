@@ -27,12 +27,12 @@
         </div>
 
         <!-- Results by Position -->
-        @foreach($candidatesByPosition as $positionName => $candidates)
+        @foreach($positionResults as $result)
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div class="bg-gray-900 dark:bg-gray-950 px-4 py-3 flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-white">{{ $positionName ?? 'Other Candidates' }}</h2>
+                    <h2 class="text-lg font-bold text-white">{{ $result['position']->title }}</h2>
                     @php 
-                        $positionTotalVotes = $candidates->sum('votes_count'); 
+                        $positionTotalVotes = $result['candidates']->sum('votes_count'); 
                     @endphp
                     <span class="text-white text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
                         {{ $positionTotalVotes }} / {{ $totalVoters }} votes
@@ -41,8 +41,8 @@
 
                 <div class="p-4 space-y-3">
                     @php 
-                        $sortedCandidates = $candidates->sortByDesc('votes_count');
-                        $noVotes = $noVotesByPosition[$positionName] ?? 0;
+                        $sortedCandidates = $result['candidates']->sortByDesc('votes_count');
+                        $noVotes = $result['noVotes'];
                         $yesVotes = $positionTotalVotes;
                     @endphp
                     @forelse($sortedCandidates as $index => $candidate)

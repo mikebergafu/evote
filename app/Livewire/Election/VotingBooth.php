@@ -45,11 +45,16 @@ class VotingBooth extends Component
 
     public function loadPositions()
     {
-        $this->positions = $this->election->candidates()
-            ->select('position', 'position_name')
-            ->distinct()
-            ->orderBy('position')
+        $this->positions = $this->election->positions()
+            ->orderBy('order')
             ->get()
+            ->map(function($position) {
+                return [
+                    'id' => $position->id,
+                    'title' => $position->title,
+                    'description' => $position->description,
+                ];
+            })
             ->toArray();
     }
 
@@ -112,7 +117,7 @@ class VotingBooth extends Component
         }
 
         $currentPosition = $this->positions[$this->currentStep];
-        $this->votes[$currentPosition['position']] = $this->selectedCandidateId;
+        $this->votes[$currentPosition['id']] = $this->selectedCandidateId;
 
         $this->selectedCandidateId = null;
         $this->showConfirmation = false;
@@ -126,12 +131,12 @@ class VotingBooth extends Component
 
     public function submitAllVotes()
     {
-        foreach ($this->votes as $position => $candidateId) {
+        foreach ($this->votes as $positionId => $candidateId) {
             Vote::create([
                 'election_id' => $this->election->id,
                 'candidate_id' => $candidateId === 'no' ? null : $candidateId,
-                'position' => $position,
-                'vote_hash' => hash('sha256', $this->voter->id . $position . time() . rand()),
+                'position' => $positionId,
+                'vote_hash' => hash('sha256', $this->voter->id . $positionId . time() . rand()),
             ]);
         }
 
@@ -172,7 +177,7 @@ class VotingBooth extends Component
         if ($this->voter && isset($this->positions[$this->currentStep])) {
             $currentPosition = $this->positions[$this->currentStep];
             $candidates = $this->election->candidates()
-                ->where('position', $currentPosition['position'])
+                ->where('position_id', $currentPosition['id'])
                 ->get();
             
             // Only show Yes/No if there's 1 candidate AND only 1 position total
