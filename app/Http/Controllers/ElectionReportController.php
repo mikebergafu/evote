@@ -32,13 +32,15 @@ class ElectionReportController extends Controller
             if ($position->candidates->count() === 1) {
                 $candidate = $position->candidates->first();
                 $yesVotes = $candidate->votes_count;
-                $noVotes = DB::table('votes')
+                
+                // Total votes for this position (including null candidate_id for "No" votes)
+                $totalPositionVotes = DB::table('votes')
                     ->where('election_id', $election->id)
                     ->where('position', $position->title)
-                    ->whereNull('candidate_id')
                     ->count();
                 
-                $totalPositionVotes = $yesVotes + $noVotes;
+                $noVotes = $totalPositionVotes - $yesVotes;
+                
                 $candidate->yes_percentage = $totalPositionVotes > 0 
                     ? round(($yesVotes / $totalPositionVotes) * 100, 2) 
                     : 0;
