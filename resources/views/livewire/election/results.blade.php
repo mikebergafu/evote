@@ -43,7 +43,8 @@
                     @php 
                         $sortedCandidates = $result['candidates']->sortByDesc('votes_count');
                         $noVotes = $result['noVotes'];
-                        $yesVotes = $positionTotalVotes;
+                        $yesVotes = $result['candidates']->sum('votes_count');
+                        $totalPositionVotes = $yesVotes + $noVotes;
                     @endphp
                     @forelse($sortedCandidates as $index => $candidate)
                         <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
@@ -64,11 +65,11 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $candidate->votes_count }}</p>
-                                    <p class="text-xs text-gray-600 dark:text-gray-400">{{ $positionTotalVotes > 0 ? round(($candidate->votes_count / $positionTotalVotes) * 100, 1) : 0 }}%</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">{{ $totalPositionVotes > 0 ? round(($candidate->votes_count / $totalPositionVotes) * 100, 1) : 0 }}%</p>
                                 </div>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div class="bg-gray-900 dark:bg-gray-600 h-2 rounded-full" style="width: {{ $positionTotalVotes > 0 ? ($candidate->votes_count / $positionTotalVotes) * 100 : 0 }}%"></div>
+                                <div class="bg-gray-900 dark:bg-gray-600 h-2 rounded-full" style="width: {{ $totalPositionVotes > 0 ? ($candidate->votes_count / $totalPositionVotes) * 100 : 0 }}%"></div>
                             </div>
                         </div>
                     @empty
@@ -91,11 +92,11 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="text-xl font-bold text-red-900 dark:text-red-400">{{ $noVotes }}</p>
-                                    <p class="text-xs text-red-600 dark:text-red-500">{{ ($yesVotes + $noVotes) > 0 ? round(($noVotes / ($yesVotes + $noVotes)) * 100, 1) : 0 }}%</p>
+                                    <p class="text-xs text-red-600 dark:text-red-500">{{ $totalPositionVotes > 0 ? round(($noVotes / $totalPositionVotes) * 100, 1) : 0 }}%</p>
                                 </div>
                             </div>
                             <div class="w-full bg-red-200 dark:bg-red-900/30 rounded-full h-2">
-                                <div class="bg-red-600 dark:bg-red-500 h-2 rounded-full" style="width: {{ ($yesVotes + $noVotes) > 0 ? ($noVotes / ($yesVotes + $noVotes)) * 100 : 0 }}%"></div>
+                                <div class="bg-red-600 dark:bg-red-500 h-2 rounded-full" style="width: {{ $totalPositionVotes > 0 ? ($noVotes / $totalPositionVotes) * 100 : 0 }}%"></div>
                             </div>
                         </div>
                     @endif
