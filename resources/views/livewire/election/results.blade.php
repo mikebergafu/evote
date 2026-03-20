@@ -42,6 +42,8 @@
                 <div class="p-4 space-y-3">
                     @php 
                         $sortedCandidates = $candidates->sortByDesc('votes_count');
+                        $noVotes = $noVotesByPosition[$positionName] ?? 0;
+                        $yesVotes = $positionTotalVotes;
                     @endphp
                     @forelse($sortedCandidates as $index => $candidate)
                         <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
@@ -72,6 +74,31 @@
                     @empty
                         <p class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">No candidates</p>
                     @endforelse
+                    
+                    @if($noVotes > 0)
+                        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-red-900 dark:text-red-400">NO</h3>
+                                        <p class="text-xs text-red-600 dark:text-red-500">Voted against</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xl font-bold text-red-900 dark:text-red-400">{{ $noVotes }}</p>
+                                    <p class="text-xs text-red-600 dark:text-red-500">{{ ($yesVotes + $noVotes) > 0 ? round(($noVotes / ($yesVotes + $noVotes)) * 100, 1) : 0 }}%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-red-200 dark:bg-red-900/30 rounded-full h-2">
+                                <div class="bg-red-600 dark:bg-red-500 h-2 rounded-full" style="width: {{ ($yesVotes + $noVotes) > 0 ? ($noVotes / ($yesVotes + $noVotes)) * 100 : 0 }}%"></div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

@@ -130,6 +130,7 @@ class VotingBooth extends Component
             Vote::create([
                 'election_id' => $this->election->id,
                 'candidate_id' => $candidateId === 'no' ? null : $candidateId,
+                'position' => $position,
                 'vote_hash' => hash('sha256', $this->voter->id . $position . time() . rand()),
             ]);
         }
