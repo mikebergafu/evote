@@ -15,6 +15,7 @@ Route::get('/register/{uuid}', \App\Livewire\Election\RegisterVoter::class)->nam
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('users', 'users')->name('users');
+    Route::view('settings', 'settings')->name('settings');
     Route::get('/elections', \App\Livewire\Election\Index::class)->name('elections.index');
     Route::get('/election/setup', Setup::class)->name('election.setup');
     Route::get('/election/{election:uuid}/manage', Manage::class)->name('election.manage');
