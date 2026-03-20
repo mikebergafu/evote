@@ -92,40 +92,85 @@
                 <div class="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-8">
                     <div class="text-center mb-4 sm:mb-6">
                         <h2 class="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ $currentPosition['position_name'] ?? 'Position' }}</h2>
-                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Select your preferred candidate</p>
+                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                            {{ $isSingleCandidate ? 'Vote Yes or No for this candidate' : 'Select your preferred candidate' }}
+                        </p>
                     </div>
                     
-                    <div class="space-y-3 sm:space-y-4">
-                        @foreach($candidates as $candidate)
-                            <div class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md">
-                                <div class="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                                    @if($candidate->photo)
-                                        <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg sm:rounded-xl object-cover shadow-md flex-shrink-0">
-                                    @else
-                                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-400 to-blue-400 rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold text-xl sm:text-2xl shadow-md flex-shrink-0">
-                                            {{ strtoupper(substr($candidate->name, 0, 2)) }}
-                                        </div>
-                                    @endif
-                                    <div class="flex-1 w-full">
-                                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
-                                        @if($candidate->position_name)
-                                            <p class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
-                                        @endif
-                                        @if($candidate->bio)
-                                            <p class="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-none">{{ $candidate->bio }}</p>
-                                        @endif
-                                        <button wire:click="selectCandidate({{ $candidate->id }})" 
-                                                class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all inline-flex items-center justify-center gap-2 text-sm sm:text-base">
-                                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                            Vote for {{ explode(' ', $candidate->name)[0] }}
-                                        </button>
+                    @if($isSingleCandidate)
+                        <!-- Single Candidate - Yes/No Vote -->
+                        @php $candidate = $candidates->first(); @endphp
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md mb-6">
+                            <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                                @if($candidate->photo)
+                                    <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover shadow-md flex-shrink-0">
+                                @else
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-400 to-blue-400 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-md flex-shrink-0">
+                                        {{ strtoupper(substr($candidate->name, 0, 2)) }}
                                     </div>
+                                @endif
+                                <div class="flex-1 text-center sm:text-left">
+                                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
+                                    @if($candidate->position_name)
+                                        <p class="text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
+                                    @endif
+                                    @if($candidate->bio)
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $candidate->bio }}</p>
+                                    @endif
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button wire:click="selectCandidate({{ $candidate->id }})" 
+                                    class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white px-6 py-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex flex-col items-center gap-2">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-xl">YES</span>
+                            </button>
+                            <button wire:click="selectCandidate('no')" 
+                                    class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-6 py-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex flex-col items-center gap-2">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                <span class="text-xl">NO</span>
+                            </button>
+                        </div>
+                    @else
+                        <!-- Multiple Candidates -->
+                        <div class="space-y-3 sm:space-y-4">
+                            @foreach($candidates as $candidate)
+                                <div class="w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md">
+                                    <div class="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                                        @if($candidate->photo)
+                                            <img src="{{ asset('storage/' . $candidate->photo) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg sm:rounded-xl object-cover shadow-md flex-shrink-0">
+                                        @else
+                                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-400 to-blue-400 rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold text-xl sm:text-2xl shadow-md flex-shrink-0">
+                                                {{ strtoupper(substr($candidate->name, 0, 2)) }}
+                                            </div>
+                                        @endif
+                                        <div class="flex-1 w-full">
+                                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $candidate->name }}</h3>
+                                            @if($candidate->position_name)
+                                                <p class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-semibold mb-2">{{ $candidate->position_name }}</p>
+                                            @endif
+                                            @if($candidate->bio)
+                                                <p class="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-none">{{ $candidate->bio }}</p>
+                                            @endif
+                                            <button wire:click="selectCandidate({{ $candidate->id }})" 
+                                                    class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all inline-flex items-center justify-center gap-2 text-sm sm:text-base">
+                                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                                Vote for {{ explode(' ', $candidate->name)[0] }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
 
                     <!-- Navigation Buttons -->
                     <div class="flex gap-3 sm:gap-4 mt-4 sm:mt-6">
@@ -148,8 +193,12 @@
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Confirm Your Vote</h2>
                         <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">Position: <span class="font-bold">{{ $currentPosition['position_name'] }}</span></p>
                         <div class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6 mb-6">
-                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">You are voting for:</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $candidates->find($selectedCandidateId)->name }}</p>
+                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">You are voting:</p>
+                            @if($selectedCandidateId === 'no')
+                                <p class="text-2xl font-bold text-red-600 dark:text-red-400">NO</p>
+                            @else
+                                <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $candidates->find($selectedCandidateId)->name }}</p>
+                            @endif
                         </div>
                         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
                             <p class="text-red-600 dark:text-red-400 font-semibold">⚠️ This action cannot be undone!</p>

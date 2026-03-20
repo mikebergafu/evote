@@ -166,17 +166,22 @@ class VotingBooth extends Component
     public function render()
     {
         $candidates = [];
+        $isSingleCandidate = false;
+        
         if ($this->voter && isset($this->positions[$this->currentStep])) {
             $currentPosition = $this->positions[$this->currentStep];
             $candidates = $this->election->candidates()
                 ->where('position', $currentPosition['position'])
                 ->get();
+            
+            $isSingleCandidate = $candidates->count() === 1;
         }
 
         return view('livewire.election.voting-booth', [
             'candidates' => $candidates,
             'currentPosition' => $this->positions[$this->currentStep] ?? null,
             'totalSteps' => count($this->positions),
+            'isSingleCandidate' => $isSingleCandidate,
         ])->layout('layouts.welcome');
     }
 }
