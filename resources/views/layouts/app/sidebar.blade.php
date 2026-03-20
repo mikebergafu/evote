@@ -27,7 +27,7 @@
                     <flux:sidebar.item icon="users" href="/users" :current="request()->is('users')" wire:navigate>
                         {{ __('Manage Users') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="cog-6-tooth" href="/settings" :current="request()->is('settings')" wire:navigate>
+                    <flux:sidebar.item icon="cog-6-tooth" :href="route('settings')" :current="request()->routeIs('settings')" wire:navigate>
                         {{ __('System Settings') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
