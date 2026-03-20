@@ -22,16 +22,27 @@
                 <div class="p-6">
                     <!-- User Settings Tab -->
                     <div id="content-user" class="tab-content">
-                        <livewire:settings.update-profile />
-                        <div class="mt-6">
-                            <livewire:settings.update-password />
+                        <div class="space-y-6">
+                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                                <livewire:settings.profile />
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                                <livewire:settings.security />
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                                <livewire:settings.appearance />
+                            </div>
                         </div>
                     </div>
 
                     <!-- System Settings Tab (Admin Only) -->
                     @if(auth()->user()->role === 'admin')
                     <div id="content-system" class="tab-content hidden">
-                        <livewire:settings.notifications />
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                            <livewire:settings.notifications />
+                        </div>
                     </div>
                     @endif
                 </div>

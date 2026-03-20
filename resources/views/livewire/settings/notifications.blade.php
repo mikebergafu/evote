@@ -38,7 +38,7 @@
 
         <!-- Self Registration -->
         <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Voter Registration Control</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Registration Control</h3>
             
             <div class="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
                 <input type="checkbox" wire:model="blockSelfRegistration" id="blockSelfRegistration" class="w-5 h-5 text-red-600 rounded">
@@ -47,7 +47,7 @@
                 </label>
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-8">
-                When enabled, voters cannot register themselves. Only admins can add voters manually.
+                When enabled, users cannot register themselves. Only admins can add voters manually.
             </p>
         </div>
 
