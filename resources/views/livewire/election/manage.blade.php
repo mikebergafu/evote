@@ -203,7 +203,7 @@
                                     <div class="flex-1 min-w-0">
                                         <h3 class="font-bold text-gray-900 dark:text-white">{{ $candidate->name }}</h3>
                                         <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                                            {{ $candidate->position_name ?: 'Position ' . $candidate->position }}
+                                            {{ $candidate->electionPosition?->title ?: ($candidate->position_name ?: 'Position ' . $candidate->position) }}
                                         </p>
                                         @if($candidate->bio)
                                             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $candidate->bio }}</p>
