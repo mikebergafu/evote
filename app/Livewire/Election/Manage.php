@@ -208,6 +208,16 @@ class Manage extends Component
         session()->flash('message', 'Voting link resent to ' . $voter->name);
     }
 
+    public function clearDeviceFingerprint($voterId)
+    {
+        $voter = Voter::findOrFail($voterId);
+        $voter->update([
+            'device_fingerprint' => null,
+            'device_registered' => false,
+        ]);
+        session()->flash('message', 'Device registration cleared for ' . $voter->name);
+    }
+
     private function sendVotingLinkSMS($voter)
     {
         $smsService = new \App\Services\SmsService();

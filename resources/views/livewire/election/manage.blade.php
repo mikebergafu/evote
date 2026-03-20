@@ -327,6 +327,13 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
+                                        @if($voter->device_registered)
+                                            <button wire:click="clearDeviceFingerprint({{ $voter->id }})" wire:confirm="Clear device registration for {{ $voter->name }}?" class="text-orange-500 hover:text-orange-700 transition-colors" title="Clear device">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                </svg>
+                                            </button>
+                                        @endif
                                         @if($voter->phone)
                                             <button wire:click="resendVotingLink({{ $voter->id }})" class="text-blue-500 hover:text-blue-700 transition-colors" title="Resend voting link">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
