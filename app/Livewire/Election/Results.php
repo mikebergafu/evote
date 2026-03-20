@@ -14,6 +14,43 @@ class Results extends Component
         $this->election = $election;
     }
 
+    public function downloadPdf()
+    {
+        $positions = $this->election->positions()->orderBy('order')->get();
+        
+        $positionResults = [];
+        foreach ($positions as $position) {
+            $candidates = $this->election->candidates()
+                ->where('position_id', $position->id)
+                ->withCount('votes')
+                ->get();
+            
+            $noVotes = $this->election->votes()
+                ->where('position', $position->id)
+                ->whereNull('candidate_id')
+                ->count();
+            
+            $positionResults[] = [
+                'position' => $position,
+                'candidates' => $candidates,
+                'noVotes' => $noVotes,
+            ];
+        }
+
+        $data = [
+            'election' => $this->election,
+            'positionResults' => $positionResults,
+            'totalVotes' => $this->election->votes()->count(),
+            'totalVoters' => $this->election->voters()->count(),
+            'voterTurnout' => $this->election->voters()->where('has_voted', true)->count(),
+        ];
+
+        $pdf = \PDF::loadView('pdf.election-results', $data);
+        return response()->streamDownload(function() use ($pdf) {
+            echo $pdf->output();
+        }, 'election-results-' . $this->election->uuid . '.pdf');
+    }
+
     public function render()
     {
         // Get positions with their candidates
