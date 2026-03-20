@@ -187,5 +187,8 @@
                 @endforelse
             </div>
         </div>
+
+        <!-- Notification Settings -->
+        <livewire:settings.notifications />
     </div>
 </x-layouts::app>

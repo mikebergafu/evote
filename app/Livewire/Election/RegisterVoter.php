@@ -33,10 +33,19 @@ class RegisterVoter extends Component
         $validated['election_id'] = $this->election->id;
         $voter = PotentialVoter::create($validated);
 
-        // Send SMS feedback
+        // Send SMS feedback to voter
         $smsService = new SmsService();
         $message = "Dear {$voter->title} {$voter->full_name}, your voter registration for {$this->election->name} has been completed successfully. You will receive further updates via SMS. Thank you for registering!";
         $smsService->send($voter->mobile, $message);
+
+        // Send alert to admin if enabled
+        $alertEnabled = \App\Models\Setting::get('voter_alert_enabled', false);
+        $alertPhone = \App\Models\Setting::get('voter_alert_phone');
+        
+        if ($alertEnabled && $alertPhone) {
+            $alertMessage = "New voter registered: {$voter->full_name} ({$voter->mobile}) for {$this->election->name}";
+            $smsService->send($alertPhone, $alertMessage);
+        }
 
         $this->registered = true;
         $this->reset(['title', 'full_name', 'email', 'mobile']);
