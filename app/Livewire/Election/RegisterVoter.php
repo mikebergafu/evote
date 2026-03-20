@@ -19,6 +19,11 @@ class RegisterVoter extends Component
     public function mount($uuid)
     {
         $this->election = Election::where('uuid', $uuid)->firstOrFail();
+        
+        // Check if self-registration is blocked
+        if (\App\Models\Setting::get('block_self_registration', false)) {
+            abort(403, 'Self-registration is currently disabled. Please contact the administrator.');
+        }
     }
 
     public function register()

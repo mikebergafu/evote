@@ -9,11 +9,13 @@ class Notifications extends Component
 {
     public $alertPhone = '';
     public $alertEnabled = false;
+    public $blockSelfRegistration = false;
 
     public function mount()
     {
         $this->alertPhone = Setting::get('voter_alert_phone', '');
         $this->alertEnabled = Setting::get('voter_alert_enabled', false);
+        $this->blockSelfRegistration = Setting::get('block_self_registration', false);
     }
 
     public function save()
@@ -24,8 +26,9 @@ class Notifications extends Component
 
         Setting::set('voter_alert_phone', $this->alertPhone);
         Setting::set('voter_alert_enabled', $this->alertEnabled);
+        Setting::set('block_self_registration', $this->blockSelfRegistration);
 
-        session()->flash('message', 'Notification settings saved!');
+        session()->flash('message', 'Settings saved!');
     }
 
     public function render()
