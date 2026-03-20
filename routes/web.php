@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/election/setup', Setup::class)->name('election.setup');
     Route::get('/election/{election:uuid}/manage', Manage::class)->name('election.manage');
     Route::get('/election/{election:uuid}/voters', \App\Livewire\Election\ManageVoters::class)->name('election.voters');
+    Route::get('/election/{election:uuid}/report', [\App\Http\Controllers\ElectionReportController::class, 'download'])->name('election.report');
 });
 
 

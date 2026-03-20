@@ -19,11 +19,6 @@ class RegisterVoter extends Component
     public function mount($uuid)
     {
         $this->election = Election::where('uuid', $uuid)->firstOrFail();
-        
-        // Check if self-registration is blocked
-        if (\App\Models\Setting::get('block_self_registration', false)) {
-            abort(403, 'Self-registration is currently disabled. Please contact the administrator.');
-        }
     }
 
     public function register()
@@ -39,7 +34,7 @@ class RegisterVoter extends Component
         $voter = PotentialVoter::create($validated);
 
         // Send SMS feedback to voter
-        $smsService = new SmsService();
+        $smsService = app(SmsService::class);
         $message = "Dear {$voter->title} {$voter->full_name}, your voter registration for {$this->election->name} has been completed successfully. You will receive further updates via SMS. Thank you for registering!";
         $smsService->send($voter->mobile, $message);
 
