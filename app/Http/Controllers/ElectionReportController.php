@@ -36,7 +36,7 @@ class ElectionReportController extends Controller
                 // Total votes for this position (including null candidate_id for "No" votes)
                 $totalPositionVotes = DB::table('votes')
                     ->where('election_id', $election->id)
-                    ->where('position', $position->title)
+                    ->where('position', $position->id)
                     ->count();
                 
                 $noVotes = $totalPositionVotes - $yesVotes;
