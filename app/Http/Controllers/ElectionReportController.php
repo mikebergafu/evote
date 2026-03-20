@@ -27,10 +27,33 @@ class ElectionReportController extends Controller
         // Calculate percentages for each position
         foreach ($positions as $position) {
             $totalVotes = $position->candidates->sum('votes_count');
-            foreach ($position->candidates as $candidate) {
-                $candidate->percentage = $totalVotes > 0 
-                    ? round(($candidate->votes_count / $totalVotes) * 100, 2) 
+            
+            // For single candidate positions, calculate Yes/No percentages
+            if ($position->candidates->count() === 1) {
+                $candidate = $position->candidates->first();
+                $yesVotes = $candidate->votes_count;
+                $noVotes = DB::table('votes')
+                    ->where('election_id', $election->id)
+                    ->where('position', $position->title)
+                    ->whereNull('candidate_id')
+                    ->count();
+                
+                $totalPositionVotes = $yesVotes + $noVotes;
+                $candidate->yes_percentage = $totalPositionVotes > 0 
+                    ? round(($yesVotes / $totalPositionVotes) * 100, 2) 
                     : 0;
+                $candidate->no_percentage = $totalPositionVotes > 0 
+                    ? round(($noVotes / $totalPositionVotes) * 100, 2) 
+                    : 0;
+                $candidate->no_votes = $noVotes;
+                $candidate->is_single_candidate = true;
+            } else {
+                foreach ($position->candidates as $candidate) {
+                    $candidate->percentage = $totalVotes > 0 
+                        ? round(($candidate->votes_count / $totalVotes) * 100, 2) 
+                        : 0;
+                    $candidate->is_single_candidate = false;
+                }
             }
         }
 

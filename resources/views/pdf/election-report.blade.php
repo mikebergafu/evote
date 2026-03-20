@@ -118,15 +118,24 @@
                 <div class="candidate-rank">{{ $index + 1 }}</div>
                 <div class="candidate-name">
                     {{ $candidate->name }}
-                    @if($index === 0)
+                    @if($index === 0 && !$candidate->is_single_candidate)
                         <strong style="color: #10B981;">✓ WINNER</strong>
                     @endif
                 </div>
                 <div class="candidate-votes">
-                    <strong>{{ $candidate->votes_count }}</strong> votes ({{ $candidate->percentage }}%)
+                    @if($candidate->is_single_candidate)
+                        <strong>{{ $candidate->votes_count }}</strong> Yes ({{ $candidate->yes_percentage }}%) | 
+                        <strong>{{ $candidate->no_votes }}</strong> No ({{ $candidate->no_percentage }}%)
+                    @else
+                        <strong>{{ $candidate->votes_count }}</strong> votes ({{ $candidate->percentage }}%)
+                    @endif
                 </div>
                 <div class="candidate-bar">
-                    <div class="bar" style="width: {{ ($candidate->votes_count / $maxVotes) * 100 }}%;"></div>
+                    @if($candidate->is_single_candidate)
+                        <div class="bar" style="width: {{ $candidate->yes_percentage }}%; background: #10B981;"></div>
+                    @else
+                        <div class="bar" style="width: {{ ($candidate->votes_count / $maxVotes) * 100 }}%;"></div>
+                    @endif
                 </div>
             </div>
             @endforeach
