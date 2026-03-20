@@ -327,7 +327,7 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button wire:click="clearDeviceFingerprint({{ $voter->id }})" wire:confirm="Clear device registration for {{ $voter->name }}?" class="text-orange-500 hover:text-orange-700 transition-colors p-1 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded {{ !$voter->device_registered ? 'opacity-50 cursor-not-allowed' : '' }}" title="{{ $voter->device_registered ? 'Clear device' : 'No device registered' }}" {{ !$voter->device_registered ? 'disabled' : '' }}>
+                                        <button onclick="confirmClearDevice({{ $voter->id }}, '{{ $voter->name }}')" class="text-orange-500 hover:text-orange-700 transition-colors p-1 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded {{ !$voter->device_registered ? 'opacity-50 cursor-not-allowed' : '' }}" title="{{ $voter->device_registered ? 'Clear device' : 'No device registered' }}" {{ !$voter->device_registered ? 'disabled' : '' }}>
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                             </svg>
@@ -404,3 +404,22 @@
         </div>
     </div>
 </div>
+
+<script>
+function confirmClearDevice(voterId, voterName) {
+    Swal.fire({
+        title: 'Clear Device Registration?',
+        text: `Remove device registration for ${voterName}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#f97316',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, clear it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            @this.call('clearDeviceFingerprint', voterId);
+        }
+    });
+}
+</script>
