@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 pt-20">
     <div class="max-w-7xl mx-auto space-y-4">
         <!-- Header -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
