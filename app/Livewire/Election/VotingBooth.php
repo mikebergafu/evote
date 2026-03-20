@@ -47,7 +47,7 @@ class VotingBooth extends Component
     {
         $this->positions = $this->election->candidates()
             ->select('position', 'position_name')
-            ->groupBy('position', 'position_name')
+            ->distinct()
             ->orderBy('position')
             ->get()
             ->toArray();
