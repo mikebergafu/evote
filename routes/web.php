@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/elections', \App\Livewire\Election\Index::class)->name('elections.index');
     Route::get('/election/setup', Setup::class)->name('election.setup');
     Route::get('/election/{election:uuid}/manage', Manage::class)->name('election.manage');
+    Route::get('/election/{election:uuid}/voters', \App\Livewire\Election\ManageVoters::class)->name('election.voters');
 });
 
 
