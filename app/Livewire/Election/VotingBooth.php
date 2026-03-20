@@ -175,7 +175,8 @@ class VotingBooth extends Component
                 ->where('position', $currentPosition['position'])
                 ->get();
             
-            $isSingleCandidate = $candidates->count() === 1;
+            // Only show Yes/No if there's 1 candidate AND only 1 position total
+            $isSingleCandidate = $candidates->count() === 1 && count($this->positions) === 1;
         }
 
         return view('livewire.election.voting-booth', [
